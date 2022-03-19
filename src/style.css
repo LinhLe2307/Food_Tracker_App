@@ -41,6 +41,11 @@ header {
   color: var(--font-color);
 }
 
+h2 {
+  text-align: center;
+  margin-top: 2rem;
+}
+
 li.food-item,
 #add-content,
 #add-content > div {
@@ -63,8 +68,8 @@ li.food-item {
   flex-direction: column;
   color: var(--font-color);
   margin: 0 auto;
-  position: relative;
   gap: 0.5rem;
+  position: relative;
 }
 
 div.item-container {
@@ -118,7 +123,7 @@ div#add-content img {
   width: 9rem;
 }
 
-#add-content label {
+div#add-content label {
   margin-right: 1rem;
   display: inline-block;
   width: 100px;

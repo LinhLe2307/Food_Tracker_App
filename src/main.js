@@ -100,7 +100,7 @@ const postCardAPI = () => {
     },
   });
 
-  foodForm.submit();
+  // foodForm.submit();
 };
 
 const submitForm = (e) => {
@@ -138,6 +138,7 @@ const submitForm = (e) => {
   });
   postCardAPI();
   closeForm();
+  // reloadPage();
 };
 
 const addForm = () => {
