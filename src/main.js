@@ -1,6 +1,8 @@
 import Chart from "chart.js/auto";
 import { FetchWrapper } from "./fetchData.js";
 import { createImg } from "./createImage.js";
+import snackbar from "snackbar";
+import "snackbar/dist/snackbar.min.css";
 
 const foodForm = document.querySelector("#food-form");
 const carb = document.querySelector("#carb");
@@ -23,6 +25,10 @@ API.get("LinhLe").then((data) => createCard(data.documents));
 
 const reloadPage = () => {
   window.location.reload();
+};
+
+const showAlertMessage = () => {
+  alertMessage.style.visibility = "hidden";
 };
 
 let total = 0;
@@ -83,8 +89,6 @@ const createCard = (items) => {
     protein.value = "";
     carb.value = "";
     fat.value = "";
-    // chartForm.submit();
-    // reloadPage();
   }
 };
 
@@ -108,18 +112,19 @@ const postCardAPI = () => {
 };
 
 const submitForm = (e) => {
-  alertMessage.style.visibility = "hidden";
+  showAlertMessage();
   e.preventDefault();
   showChart(carb.value, protein.value, fat.value, foodName.value);
   postCardAPI();
   closeForm();
   // reloadPage();
   // foodForm.submit();
+  snackbar.show("Food added successfully");
 };
 
 const showCard = (e) => {
-  alertMessage.style.visibility = "hidden";
   if (e.target.classList.contains("food-item")) {
+    showAlertMessage();
     const itemContainer = e.target.parentElement.parentElement;
     API.get(itemContainer.dataset.foodEndpoint).then((data) => {
       // console.log(data);
@@ -151,7 +156,6 @@ const showChart = (
       datasets: [
         {
           label: "# of Votes",
-          // data: [carb.value, protein.value, fat.value],
           data: [currentCarb, currentProtein, currentFat],
           // backgroundColor: ["#b5838d", "#e5989b", "#ffb4a2"],
           backgroundColor: ["#b388eb", "#f7aef8", "#8093f1"],
@@ -172,7 +176,6 @@ const showChart = (
 
 const addForm = () => {
   addContent.style.visibility = "visible";
-  addContent.style.zIndex = 1;
 };
 
 const closeForm = () => {
@@ -191,6 +194,7 @@ const deleteItem = (e) => {
       +wrapper.parentElement.dataset.carb * 4 +
       +wrapper.parentElement.dataset.fat * 9;
     totalCalories.innerHTML = `Total calories logged: <span>${total}</span>`;
+    snackbar.show("Food removed successfully");
   }
 };
 

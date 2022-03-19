@@ -20,6 +20,7 @@
   "homepage": "https://github.com/LinhLe2307/Food_Tracker_App#readme",
   "dependencies": {
     "chart.js": "^3.7.1",
-    "parcel": "^2.0.0-rc.0"
+    "parcel": "^2.0.0-rc.0",
+    "snackbar": "^1.1.0"
   }
 }
