@@ -52,8 +52,8 @@ header {
 /* DIV CARD */
 
 li.food-item,
-#add-content,
-#add-content > div {
+div#add-content,
+div#add-content > div {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -62,6 +62,8 @@ li.food-item,
 ul#display-cards {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
 li.food-item {
@@ -77,10 +79,6 @@ li.food-item {
   position: relative;
 }
 
-div.item-container {
-  margin: 1rem;
-}
-
 div.item-container img {
   width: 5rem;
   top: 0;
@@ -91,7 +89,7 @@ div.item-container img {
 div.item-container div {
   position: relative;
   width: fit-content;
-  padding-top: 2rem;
+  padding-top: 1rem;
   margin: 0 auto;
 }
 
@@ -134,7 +132,7 @@ div#add-content img {
 div#add-content label {
   margin-right: 1rem;
   display: inline-block;
-  width: 100px;
+  width: 6.25rem;
 }
 
 h3 {
@@ -189,6 +187,7 @@ select {
   bottom: 2rem;
   right: 2rem;
   background: url("https://free3dicon.com/wp-content/uploads/2022/02/health-300x300.png.webp");
+  background-repeat: no-repeat;
   border-radius: 0%;
   background-size: contain;
 }
@@ -211,11 +210,11 @@ div.style > h1 {
 /* PIE CHART */
 
 #stats {
-  height: 35rem;
-  margin: 2rem;
+  /* height: 35rem; */
+  margin-top: 2rem;
 }
 
-.chart-container {
+div.chart-container {
   position: relative;
   margin: auto;
 }
@@ -236,8 +235,98 @@ footer {
   font-size: 12px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1230px) {
   ul#display-cards {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  form#food-form {
+    height: 28rem;
+    width: 21rem;
+  }
+
+  /* div#add-content div {
+    height: 80vh;
+  } */
+
+  div#add-content img {
+    width: 7rem;
+  }
+}
+
+@media (max-width: 960px) {
+  ul#display-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  div.chart-container {
+    width: 25rem;
+  }
+}
+
+@media (max-width: 757px) {
+  main {
+    padding: 0;
+  }
+
+  button {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .stats h1 {
+    text-align: center;
+  }
+
+  div.item-container {
+    margin: 0;
+  }
+
+  div.item-container div {
+    padding-top: 1rem;
+  }
+
+  /* div.chart-container {
+    width: 70vw;
+  } */
+
+  ul#display-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+  }
+  #add-button {
+    bottom: 1rem;
+    right: 1rem;
+  }
+}
+
+@media (max-width: 575px) {
+  div.chart-container {
+    width: 20rem;
+  }
+  li.food-item {
+    width: 9.5rem;
+    height: 13rem;
+  }
+  div.item-container img {
+    width: 4.5rem;
+    top: 0;
+    left: 0;
+    position: absolute;
+  }
+
+  div.item-container div {
+    margin-top: 1rem;
+  }
+
+  div#add-content label {
+    width: 4rem;
+  }
+
+  form#food-form {
+    width: 20rem;
+    height: 26rem;
+  }
+  div#add-content img {
+    width: 6rem;
   }
 }
