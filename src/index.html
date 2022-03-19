@@ -63,14 +63,19 @@
         <button id="close-button"></button>
       </div>
       <div id="stats" class="style">
-        <h2>Stats</h2>
-        <h3 id="display-food-name"></h3>
+        <h1>Stats</h1>
+        <h3 id="display-pie-chart"></h3>
+        <div class="chart-container">
+          <h3 id="alert-message">
+            Click or create a card to display information
+          </h3>
+          <canvas id="myChart"></canvas>
+        </div>
       </div>
-      <canvas id="myChart" width="400" height="200"></canvas>
       <div id="log" class="style">
-        <h2>Log</h2>
+        <h1>Log</h1>
         <h3 id="total-calories"></h3>
-        <ul id="display-items"></ul>
+        <ul id="display-cards"></ul>
       </div>
     </main>
     <button id="add-button"></button>

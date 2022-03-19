@@ -6,13 +6,14 @@ const foodForm = document.querySelector("#food-form");
 const carb = document.querySelector("#carb");
 const protein = document.querySelector("#protein");
 const fat = document.querySelector("#fat");
-const ul = document.querySelector("#display-items");
+const ul = document.querySelector("#display-cards");
 const foodName = document.querySelector("#food-name");
 const addButton = document.querySelector("#add-button");
 const addContent = document.querySelector("#add-content");
 const closeButton = document.querySelector("#close-button");
-const displayFoodName = document.querySelector("#display-food-name");
+const displayPieChart = document.querySelector("#display-pie-chart");
 const totalCalories = document.querySelector("#total-calories");
+const alertMessage = document.querySelector("#alert-message");
 
 const API = new FetchWrapper(
   "https://firestore.googleapis.com/v1/projects/programmingjs-90a13/databases/(default)/documents/"
@@ -57,7 +58,7 @@ const createCard = (items) => {
           +item.fields.fat.integerValue * 9;
 
         h2.textContent = item.fields.name.stringValue;
-        p.textContent = cardCalories;
+        p.textContent = `${cardCalories} calories`;
         pCarb.textContent = `Carb: ${item.fields.carb.integerValue}g`;
         pProtein.textContent = `Protein: ${item.fields.protein.integerValue}g`;
         pFat.textContent = `Fat: ${item.fields.fat.integerValue}g`;
@@ -78,7 +79,7 @@ const createCard = (items) => {
         ul.appendChild(div);
       }
     });
-    totalCalories.textContent = `Total calories logged: ${total}`;
+    totalCalories.innerHTML = `Total calories logged: <span>${total}</span>`;
     protein.value = "";
     carb.value = "";
     fat.value = "";
@@ -107,6 +108,7 @@ const postCardAPI = () => {
 };
 
 const submitForm = (e) => {
+  alertMessage.style.visibility = "hidden";
   e.preventDefault();
   showChart(carb.value, protein.value, fat.value, foodName.value);
   postCardAPI();
@@ -116,6 +118,7 @@ const submitForm = (e) => {
 };
 
 const showCard = (e) => {
+  alertMessage.style.visibility = "hidden";
   if (e.target.classList.contains("food-item")) {
     const itemContainer = e.target.parentElement.parentElement;
     API.get(itemContainer.dataset.foodEndpoint).then((data) => {
@@ -139,10 +142,10 @@ const showChart = (
   if (currentChart) {
     currentChart.destroy();
   }
-  displayFoodName.textContent = `Food Name: ${currentFoodName}`;
+  displayPieChart.innerHTML = `Food Name: <span>${currentFoodName}</span>`;
   const ctx = document.getElementById("myChart");
   currentChart = new Chart(ctx, {
-    type: "bar",
+    type: "doughnut",
     data: {
       labels: ["Carb", "Protein", "Fat"],
       datasets: [
@@ -150,16 +153,9 @@ const showChart = (
           label: "# of Votes",
           // data: [carb.value, protein.value, fat.value],
           data: [currentCarb, currentProtein, currentFat],
-          backgroundColor: [
-            "rgba(255, 99, 132, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-            "rgba(255, 206, 86, 0.2)",
-          ],
-          borderColor: [
-            "rgba(255, 99, 132, 1)",
-            "rgba(54, 162, 235, 1)",
-            "rgba(255, 206, 86, 1)",
-          ],
+          // backgroundColor: ["#b5838d", "#e5989b", "#ffb4a2"],
+          backgroundColor: ["#b388eb", "#f7aef8", "#8093f1"],
+          borderColor: ["#826aed", "#fb6376", "#33658a"],
           borderWidth: 1,
         },
       ],
@@ -194,7 +190,7 @@ const deleteItem = (e) => {
       +wrapper.parentElement.dataset.protein * 4 +
       +wrapper.parentElement.dataset.carb * 4 +
       +wrapper.parentElement.dataset.fat * 9;
-    totalCalories.textContent = `Total calories logged: ${total}`;
+    totalCalories.innerHTML = `Total calories logged: <span>${total}</span>`;
   }
 };
 
