@@ -11,7 +11,8 @@ const foodName = document.querySelector("#food-name");
 const addButton = document.querySelector("#add-button");
 const addContent = document.querySelector("#add-content");
 const closeButton = document.querySelector("#close-button");
-const result = document.querySelector("#result");
+const displayFoodName = document.querySelector("#display-food-name");
+const totalCalories = document.querySelector("#total-calories");
 
 const API = new FetchWrapper(
   "https://firestore.googleapis.com/v1/projects/programmingjs-90a13/databases/(default)/documents/"
@@ -49,16 +50,20 @@ const createCard = (items) => {
         div.setAttribute("data-carb", item.fields.carb.integerValue);
         div.setAttribute("data-fat", item.fields.fat.integerValue);
 
+        // this is for each card's calories
+        let cardCalories =
+          +item.fields.protein.integerValue * 4 +
+          +item.fields.carb.integerValue * 4 +
+          +item.fields.fat.integerValue * 9;
+
         h2.textContent = item.fields.name.stringValue;
-        p.textContent = item.fields.name.stringValue;
+        p.textContent = cardCalories;
         pCarb.textContent = `Carb: ${item.fields.carb.integerValue}g`;
         pProtein.textContent = `Protein: ${item.fields.protein.integerValue}g`;
         pFat.textContent = `Fat: ${item.fields.fat.integerValue}g`;
 
-        total +=
-          +item.fields.protein.integerValue * 4 +
-          +item.fields.carb.integerValue * 4 +
-          +item.fields.fat.integerValue * 9;
+        // this is for total calories
+        total += cardCalories;
 
         li.appendChild(h2);
         li.appendChild(p);
@@ -73,7 +78,7 @@ const createCard = (items) => {
         ul.appendChild(div);
       }
     });
-    result.textContent = `Total calories logged: ${total}`;
+    totalCalories.textContent = `Total calories logged: ${total}`;
     protein.value = "";
     carb.value = "";
     fat.value = "";
@@ -99,21 +104,52 @@ const postCardAPI = () => {
       },
     },
   });
-
-  // foodForm.submit();
 };
 
 const submitForm = (e) => {
   e.preventDefault();
+  showChart(carb.value, protein.value, fat.value, foodName.value);
+  postCardAPI();
+  closeForm();
+  // reloadPage();
+  // foodForm.submit();
+};
+
+const showCard = (e) => {
+  if (e.target.classList.contains("food-item")) {
+    const itemContainer = e.target.parentElement.parentElement;
+    API.get(itemContainer.dataset.foodEndpoint).then((data) => {
+      // console.log(data);
+      const currentProtein = data.fields.protein.integerValue;
+      const currentCarb = data.fields.carb.integerValue;
+      const currentFat = data.fields.fat.integerValue;
+      const currentFoodName = data.fields.name.stringValue;
+      showChart(currentCarb, currentProtein, currentFat, currentFoodName);
+    });
+  }
+};
+
+let currentChart;
+const showChart = (
+  currentCarb,
+  currentProtein,
+  currentFat,
+  currentFoodName
+) => {
+  if (currentChart) {
+    currentChart.destroy();
+  }
+  displayFoodName.textContent = `Food Name: ${currentFoodName}`;
   const ctx = document.getElementById("myChart");
-  const myChart = new Chart(ctx, {
+  currentChart = new Chart(ctx, {
     type: "bar",
     data: {
       labels: ["Carb", "Protein", "Fat"],
       datasets: [
         {
           label: "# of Votes",
-          data: [carb.value, protein.value, fat.value],
+          // data: [carb.value, protein.value, fat.value],
+          data: [currentCarb, currentProtein, currentFat],
           backgroundColor: [
             "rgba(255, 99, 132, 0.2)",
             "rgba(54, 162, 235, 0.2)",
@@ -136,9 +172,6 @@ const submitForm = (e) => {
       },
     },
   });
-  postCardAPI();
-  closeForm();
-  // reloadPage();
 };
 
 const addForm = () => {
@@ -161,7 +194,7 @@ const deleteItem = (e) => {
       +wrapper.parentElement.dataset.protein * 4 +
       +wrapper.parentElement.dataset.carb * 4 +
       +wrapper.parentElement.dataset.fat * 9;
-    result.textContent = `Total calories logged: ${total}`;
+    totalCalories.textContent = `Total calories logged: ${total}`;
   }
 };
 
@@ -169,3 +202,4 @@ addButton.addEventListener("click", addForm);
 foodForm.addEventListener("submit", submitForm);
 closeButton.addEventListener("click", closeForm);
 ul.addEventListener("click", deleteItem);
+ul.addEventListener("click", showCard);
