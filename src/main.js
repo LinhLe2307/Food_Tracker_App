@@ -118,24 +118,31 @@ const postCardAPI = () => {
 };
 
 // to display pie chart, post data and fetch the current item after post using promise. Otherwise, it will run synchronous => no data to fetch
+const getCurrentItem = () => {
+  // get the endpoint of the last item after posting it to API. Waiting for 500 milisseconds before fetch it => will have the endpoint
+  let promise = new Promise((resolve, reject) => {
+    setTimeout(() => resolve(API.get("LinhLe")), 100);
+  });
+  promise.then((data) => {
+    // console.log(data.documents);
+    createCard(data.documents[data.documents.length - 1]);
+  });
+};
+
 const submitForm = (e) => {
   e.preventDefault();
 
   // post the data to API
   postCardAPI();
 
-  // get the endpoint of the last item after posting it to API. Waiting for 100 milisseconds before fetch it => will have the endpoint
-  new Promise((resolve, reject) => {
-    setTimeout(() => resolve(API.get("LinhLe")), 100);
-  }).then((data) => createCard(data.documents[data.documents.length - 1]));
+  //get current item's endpoint
+  getCurrentItem();
 
   //to hide the alert message
   hideAlertMessage();
 
   // to display the chart to the browser
   showChart(carb.value, protein.value, fat.value, foodName.value);
-
-  // postCardAPI();
 
   // to close the add form
   closeForm();
