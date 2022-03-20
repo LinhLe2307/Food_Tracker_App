@@ -33,6 +33,7 @@ let total = 0;
 
 const fetchCards = (items) => {
   if (items) {
+    console.log("before post", items);
     const displayCard = items.map((item) => {
       if (item.fields) {
         createCard(item);
@@ -121,16 +122,19 @@ const postCardAPI = () => {
 const getCurrentItem = () => {
   // get the endpoint of the last item after posting it to API. Waiting for 500 milisseconds before fetch it => will have the endpoint
   let promise = new Promise((resolve, reject) => {
-    setTimeout(() => resolve(API.get("LinhLe")), 100);
+    setTimeout(() => resolve(API.get("LinhLe")), 50);
   });
   promise.then((data) => {
-    // console.log(data.documents);
-    createCard(data.documents[data.documents.length - 1]);
+    console.log("after post", data);
+    fetchCards(data.documents);
   });
 };
 
 const submitForm = (e) => {
   e.preventDefault();
+
+  ul.textContent = "";
+  total = 0;
 
   // post the data to API
   postCardAPI();
