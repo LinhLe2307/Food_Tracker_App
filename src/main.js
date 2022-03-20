@@ -33,7 +33,7 @@ let total = 0;
 
 const fetchCards = (items) => {
   if (items) {
-    console.log("before post", items);
+    // console.log("before post", items);
     const displayCard = items.map((item) => {
       if (item.fields) {
         createCard(item);
@@ -118,14 +118,14 @@ const postCardAPI = () => {
   });
 };
 
-// to display pie chart, post data and fetch the current item after post using promise. Otherwise, it will run synchronous => no data to fetch
+// to display pie chart, fetch the current item after posting it using promise. Otherwise, it will run synchronous => no data to fetch
 const getCurrentItem = () => {
-  // get the endpoint of the last item after posting it to API. Waiting for 500 milisseconds before fetch it => will have the endpoint
+  // get the endpoint of the last item after posting it to API. Waiting for 50 milisseconds before fetch it => will have the endpoint
   let promise = new Promise((resolve, reject) => {
     setTimeout(() => resolve(API.get("LinhLe")), 50);
   });
   promise.then((data) => {
-    console.log("after post", data);
+    // console.log("after post", data);
     fetchCards(data.documents);
   });
 };
