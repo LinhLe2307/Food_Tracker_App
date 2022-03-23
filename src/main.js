@@ -1,6 +1,8 @@
 import Chart from "chart.js/auto";
 import { FetchWrapper } from "./fetchData.js";
-import { createImg } from "./createImage.js";
+import { createCard } from "./createCard.js";
+import { postCardAPI } from "./postCardAPI";
+
 import snackbar from "snackbar";
 import "snackbar/dist/snackbar.min.css";
 
@@ -36,87 +38,14 @@ const fetchCards = (items) => {
     // console.log("before post", items);
     const displayCard = items.map((item) => {
       if (item.fields) {
-        createCard(item);
+        createCard(item, protein, carb, fat);
       }
     });
   }
 };
 
-// for indivudual card
-const createCard = (item) => {
-  const div = document.createElement("div");
-  const div2 = document.createElement("div");
-  const li = document.createElement("li");
-  const h2 = document.createElement("h2");
-  const p = document.createElement("p");
-  const pCarb = document.createElement("p");
-  const pProtein = document.createElement("p");
-  const pFat = document.createElement("p");
-  const deleteBtn = document.createElement("button");
-
-  div.classList.add("item-container");
-  li.classList.add("food-item");
-  deleteBtn.classList.add("delete-button");
-
-  //take the food Endpoint, the endpoint starts at index 59
-  div.setAttribute("data-food-endpoint", item.name.slice(59));
-
-  div.setAttribute("data-protein", item.fields.protein.integerValue);
-  div.setAttribute("data-carb", item.fields.carb.integerValue);
-  div.setAttribute("data-fat", item.fields.fat.integerValue);
-
-  // this is for each card's calories
-  let cardCalories =
-    +item.fields.protein.integerValue * 4 +
-    +item.fields.carb.integerValue * 4 +
-    +item.fields.fat.integerValue * 9;
-
-  h2.textContent = item.fields.name.stringValue;
-  p.textContent = `${cardCalories} calories`;
-  pCarb.textContent = `Carb: ${item.fields.carb.integerValue}g`;
-  pProtein.textContent = `Protein: ${item.fields.protein.integerValue}g`;
-  pFat.textContent = `Fat: ${item.fields.fat.integerValue}g`;
-
-  // this is for total calories
-  total += cardCalories;
-
-  li.appendChild(h2);
-  li.appendChild(p);
-  li.appendChild(pCarb);
-  li.appendChild(pProtein);
-  li.appendChild(pFat);
-  li.appendChild(deleteBtn);
-  div2.appendChild(li);
-  createImg(item, div2);
-  div.appendChild(div2);
-
-  ul.appendChild(div);
-
-  totalCalories.innerHTML = `Total calories logged: <span>${total}</span>`;
-  protein.value = "";
-  carb.value = "";
-  fat.value = "";
-};
-
 // to post the data to API
-const postCardAPI = () => {
-  API.post("LinhLe", {
-    fields: {
-      carb: {
-        integerValue: carb.value,
-      },
-      fat: {
-        integerValue: fat.value,
-      },
-      protein: {
-        integerValue: protein.value,
-      },
-      name: {
-        stringValue: foodName.value,
-      },
-    },
-  });
-};
+postCardAPI();
 
 // to display pie chart, fetch the current item after posting it using promise. Otherwise, it will run synchronous => no data to fetch
 const getCurrentItem = () => {
